@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>test react</title>
+    <script src="https://unpkg.com/react@latest/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <style>
+      input[type="checkbox"] {
+        margin-right: -15px;
+        display: inline-block;
+        height: 30px;
+        width: 30px;
+      }
+      span {
+        position: absolute;
+        margin-right: -52px;
+        text-indent: 22px;
+        line-height: 34px;
+      }
+      input {
+        height: 50px;
+        width: 300px;
+        font-size: 2rem;
+      }
+      #root {
+        width: 100px;
+        position: relative;
+        margin: auto;
+      }
+      .error {
+        background-color: red;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      class RegisterUser extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            title: '',
+            firstName: '',
+            lastName: '',
+            street: '',
+            town: '',
+            postCode: '',
+            dateOfBirth: '',
+            isAgreement: false
+          };
+
+          this.getValue = (event) => {
+            return event.target.value;
+          };
+
+          this.addError = (event) => {
+            event.target.className = "error";
+          };
+
+          this.removeError = (event) => {
+            event.target.className = "";
+          };
+
+          this.isValidTitle = (event) => {
+            let value = this.getValue(event);
+            if (value.length > 3) {
+              this.removeError(event);
+            } else {
+              this.addError(event);
+            }
+            this.setState({title: value});
+          };
+
+          this.isValidFname = (event) => {
+            let value = this.getValue(event);
+            if (value.length > 6) {
+              this.removeError(event);
+            } else {
+              this.addError(event);
+            }
+            this.setState({firstName: value});
+          };
+
+          this.isValidLname = (event) => {
+            let value = this.getValue(event);
+            if(value.length > 3) {
+              this.removeError(event);
+            } else {
+              this.addError(event);
+            }
+            this.setState({lastName: value});
+          };
+
+          this.isValidStreet = (event) => {
+            let value = this.getValue(event);
+            if(/\w+/.test(value)) {
+              this.removeError(event);
+            } else {
+              this.addError(event);
+            }
+            this.setState({street: value});
+          };
+
+          this.isValidTown = (event) => {
+            let value = this.getValue(event);
+            if(value.length > 7) {
+              this.removeError(event);
+            } else {
+              this.addError(event);
+            }
+            this.setState({town: value});
+          };
+
+          this.isValidPostCode = (event) => {
+            let value = this.getValue(event);
+            if(/^[1-9]\d{4,7}$/.test(value)) {
+              this.removeError(event);
+            } else {
+              this.addError(event);
+            }
+            this.setState({postCode: value});
+          };
+
+          this.isValidAge = (event) => {
+            let value = this.getValue(event);
+            if(new Date().getFullYear() - new Date(value).getFullYear() > 18) {
+              this.removeError(event);
+            } else {
+              this.addError(event);
+            }
+            this.setState({dateOfBirth: value});
+          };
+
+          this.isAgreement = (event) => {
+            this.setState({isAgreement: this.getValue(event) ? "check": ""});
+          }
+
+          this.submit = () => {
+            if (this.state.isAgreement) {
+              alert(JSON.stringify(this.state));
+            }
+          }
+        }
+
+        render() {
+          return (
+            <div>
+              <label> Title: <input type="text" value={this.state.title} onChange={this.isValidTitle}  /></label>
+              <label> First name: <input type="text" value={this.state.firstName} onChange={this.isValidFname}/></label>
+              <label> Last name: <input type="text" value={this.state.lastName} onChange={this.isValidLname} /></label>
+              <label> Street: <input type="text" value={this.state.street} onChange={this.isValidStreet} /></label>
+              <label> Town: <input type="text" value={this.state.town} onChange={this.isValidTown} /></label>
+              <label> Postal Code: <input type="text" value={this.state.postCode} onChange={this.isValidPostCode} /></label>
+              <label> Date of Birth: <input type="date" value={this.state.dateOfBirth} onChange={this.isValidAge} /></label>
+              <label><input type="checkbox" onChange={this.isAgreement} /> <span>18+ years of age </span> </label>
+              <input type="button" value="SUBMIT" onClick={this.submit} />
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(
+        <RegisterUser />,
+        document.getElementById('root')
+      );
+    </script>
+  </body>
+</html>
